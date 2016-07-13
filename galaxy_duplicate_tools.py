@@ -1,6 +1,23 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
+#
 # author: lecorguille@sb-roscoff.fr
+#
+#
+# This programme can duplicate tool within the tools panel
+# It take a tool_list.yaml with a new element list tool_panel_section_id_alts
+#         - name: anova
+#           owner: lecorguille
+#           tool_panel_section_id: 'LCMS-statistical_analysis'
+#           tool_panel_section_id_alts: 
+#             - 'LCMS-statistical_analysis'
+#             - 'GCMS-statistical_analysis'
+#             - 'NMR-statistical_analysis'
+# and a shed_tool_conf.xml file
+#
+# NOTE that this program can't deal with different chanset_revision
+#
+
 
 from xml.dom import minidom
 from re import sub
@@ -12,12 +29,14 @@ def getTools(xmldoc):
 
     for sectionElement in xmldoc.getElementsByTagName('section'):
         for toolElement in sectionElement.getElementsByTagName('tool'):
-            #<tool_shed>toolshed.g2.bx.psu.edu</tool_shed>
-            #<repository_name>xcms_xcmsset</repository_name>
-            #<repository_owner>lecorguille</repository_owner>
-            #<installed_changeset_revision>69eb0fc05837</installed_changeset_revision>
-            #<id>toolshed.g2.bx.psu.edu/repos/lecorguille/xcms_xcmsset/abims_xcms_xcmsSet/2.0.9</id>
-            #<version>2.0.9</version>
+            # <tool file="toolshed.g2.bx.psu.edu/repos/lecorguille/anova/bcd05315efc5/anova/abims_anova.xml" guid="toolshed.g2.bx.psu.edu/repos/lecorguille/anova/abims_anova/1.1.4">
+            #     <tool_shed>toolshed.g2.bx.psu.edu</tool_shed>
+            #     <repository_name>anova</repository_name>
+            #     <repository_owner>lecorguille</repository_owner>
+            #     <installed_changeset_revision>bcd05315efc5</installed_changeset_revision>
+            #     <id>toolshed.g2.bx.psu.edu/repos/lecorguille/anova/abims_anova/1.1.4</id>
+            #     <version>1.1.4</version>
+            # </tool>
             
             #toolIdRevision = toolElement.getElementsByTagName('tool_shed')[0].firstChild.nodeValue+"/"+toolElement.getElementsByTagName('repository_owner')[0].firstChild.nodeValue+"/"+toolElement.getElementsByTagName('repository_name')[0].firstChild.nodeValue+"/"+toolElement.getElementsByTagName('installed_changeset_revision')[0].firstChild.nodeValue
             toolId = toolElement.getElementsByTagName('tool_shed')[0].firstChild.nodeValue+"/"+toolElement.getElementsByTagName('repository_owner')[0].firstChild.nodeValue+"/"+toolElement.getElementsByTagName('repository_name')[0].firstChild.nodeValue
@@ -61,12 +80,13 @@ if __name__ == '__main__':
 
     # browse yaml to get tools which need alternative section
     for yamltool in yamldoc['tools']:
-        # name: anova
-        # owner: lecorguille
-        # tool_panel_section_id: 'LCMS-statistical_analysis'
-        # tool_panel_section_id_alt: 'LCMS-statistical_analysis,GCMS-statistical_analysis,NMR-statistical_analysis'
-        # tool_shed_url: https://toolshed.g2.bx.psu.edu
-        # install_tool_dependencies: False
+        # - name: anova
+        #   owner: lecorguille
+        #   tool_panel_section_id: 'LCMS-statistical_analysis'
+        #   tool_panel_section_id_alts: 
+        #     - 'LCMS-statistical_analysis'
+        #     - 'GCMS-statistical_analysis'
+        #     - 'NMR-statistical_analysis'
         
         #@TODO: deal with revisions (note that its a list too)
         #toolIdRevision = tool['tool_shed_url']+"/"+tool['owner']+"/"+tool['name']+"/"+tool['revisions']
