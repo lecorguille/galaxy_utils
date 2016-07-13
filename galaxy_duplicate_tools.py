@@ -38,8 +38,8 @@ def getTools(xmldoc):
             #     <version>1.1.4</version>
             # </tool>
             
-            #toolIdRevision = toolElement.getElementsByTagName('tool_shed')[0].firstChild.nodeValue+"/"+toolElement.getElementsByTagName('repository_owner')[0].firstChild.nodeValue+"/"+toolElement.getElementsByTagName('repository_name')[0].firstChild.nodeValue+"/"+toolElement.getElementsByTagName('installed_changeset_revision')[0].firstChild.nodeValue
             toolId = toolElement.getElementsByTagName('tool_shed')[0].firstChild.nodeValue+"/"+toolElement.getElementsByTagName('repository_owner')[0].firstChild.nodeValue+"/"+toolElement.getElementsByTagName('repository_name')[0].firstChild.nodeValue
+            #toolIdRevision = toolId+"/"+toolElement.getElementsByTagName('installed_changeset_revision')[0].firstChild.nodeValue
             if not (tools.has_key(toolId)):
                 #tools[toolIdRevision] = {'xmlelements' : [], 'section' : sectionElement.getAttribute('id')}
                 tools[toolId] = {'xmlelements' : [], 'section' : sectionElement.getAttribute('id')}
@@ -88,10 +88,10 @@ if __name__ == '__main__':
         #     - 'GCMS-statistical_analysis'
         #     - 'NMR-statistical_analysis'
         
-        #@TODO: deal with revisions (note that its a list too)
-        #toolIdRevision = tool['tool_shed_url']+"/"+tool['owner']+"/"+tool['name']+"/"+tool['revisions']
         if (yamltool.has_key('tool_panel_section_id_alts')):
             yamltoolId = sub('http[s]?://', r'', yamltool['tool_shed_url'])+"/"+yamltool['owner']+"/"+yamltool['name']
+            #@TODO: deal with revisions (note that its a list too)
+            #yamltoolId = yamltoolId+"/"+tool['revisions']
             xmltool = xmltools[yamltoolId]
             for tool_panel_section_id_alt in yamltool['tool_panel_section_id_alts']:
                 if (tool_panel_section_id_alt == xmltool['section']):
@@ -101,9 +101,10 @@ if __name__ == '__main__':
 
     # write the modify xml
     if args.replace is False :
-        outfd=open(args.shed_tool_conf.name+".new","w")
+        outputFilename = args.shed_tool_conf.name+".new"
     else:
-        outfd=open(args.shed_tool_conf.name,"w")
+        outputFilename = args.shed_tool_conf.name
+    outfd=open(outputFilename,"w")
     xmldoc.writexml(outfd,addindent="  ",newl="\n")
 
 
