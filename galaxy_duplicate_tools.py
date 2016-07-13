@@ -48,6 +48,7 @@ if __name__ == '__main__':
     parser = argparse.ArgumentParser(description='This script will duplicate the tool within the tool panel accroding to a tool_list.yaml and its tags tool_panel_section_id_alts')
     parser.add_argument('tool_list', metavar='tool_list', type=argparse.FileType('r'), help='a tool_list.yaml')
     parser.add_argument('shed_tool_conf', metavar='shed_tool_conf', type=argparse.FileType('r'), help='a shed_tool_conf.xml')
+    parser.add_argument("-i",dest="replace",help="Edit files in place",action="store_true",default=False)
 
     args = parser.parse_args()
     
@@ -79,8 +80,13 @@ if __name__ == '__main__':
                 xmldoc = addToolInSection(xmldoc,xmltool,tool_panel_section_id_alt)
 
     # write the modify xml
-    outfd=open(args.shed_tool_conf.name+".new","w")
+    if args.replace is False :
+        outfd=open(args.shed_tool_conf.name+".new","w")
+    else:
+        outfd=open(args.shed_tool_conf.name,"w")
     xmldoc.writexml(outfd,addindent="  ",newl="\n")
+
+
 
 
 
