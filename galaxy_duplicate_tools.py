@@ -23,6 +23,7 @@ from xml.dom import minidom
 from re import sub
 import yaml
 import argparse
+import shutil
 
 def getTools(xmldoc):
     tools={}
@@ -103,6 +104,7 @@ if __name__ == '__main__':
     if args.replace is False :
         outputFilename = args.shed_tool_conf.name+".new"
     else:
+        shutil.copy2(args.shed_tool_conf.name, args.shed_tool_conf.name+".noduplicate")
         outputFilename = args.shed_tool_conf.name
     outfd=open(outputFilename,"w")
     xmldoc.writexml(outfd,addindent="  ",newl="\n")
